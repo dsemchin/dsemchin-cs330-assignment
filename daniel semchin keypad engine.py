@@ -15,21 +15,21 @@ class state:
         self.name = name
         self.args = {}
         self.output = output
-        self.current = False
+        
+    def __repr__(self):
+        return str((self.name))
         
     def append_args(self, arg, next_state):
         self.args.update({arg : next_state})
         
     def parse(self,char):
-        print(char)
+        
         try: 
             return self.args.get(char)
         except:
             return self
         
-    def __repr__(self):
-        return str((self.name))
-        
+
 class fsm:
     def __init__(self):
         self.states = []
@@ -52,14 +52,12 @@ class fsm:
         
         self.states[0].append_args('1', unlock_state)
         self.states[0].append_args('4', lock_state)
-        
         self.states[1].append_args('1', unlock_state)
         self.states[1].append_args('4', lock_state)
             
         # append complete passcode state
         complete_state = state(passcode,'NONE')
         complete_state.args.update({'1':unlock_state,'4':lock_state})
-        print(complete_state.args)
         self.append(complete_state)
         
         # append partial passcode states
@@ -78,12 +76,6 @@ class fsm:
         # setting start state for FSM
         self.current = empty_state
         print(self)
-        
-    def find(self, name):
-        return
-        
-    def transition(self):
-        pass
 
     def read(self, string):
         return collections.deque(string)
@@ -102,12 +94,15 @@ class fsm:
                 if self.current == new_state:
                     self.current = self.current
                     print('NONE')
+                    break
                 if type(new_state) == type(None):
                     self.current = self.states[-1]
+                    
+                    break
                 else:
                     self.current = new_state
-                    print(self.current.output)
-                print(self.current)
+                    print("Output: " + str(self.current.output))
+                print("Current State: " + str(self.current))
 
 passcode = input("Create a passcode (leave blank for '2255'): ")
 if passcode == '':
