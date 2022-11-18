@@ -8,6 +8,7 @@ Created on Thu Nov 17 09:15:47 2022
 import unittest
 import re
 import collections
+import sys
 
 class state:
     def __init__(self, name, output):
@@ -22,13 +23,12 @@ class state:
     def parse(self,char):
         print(char)
         try: 
-            #print("transition")
             return self.args.get(char)
         except:
             return self
         
     def __repr__(self):
-        return str((self.name))#, self.args))
+        return str((self.name))
         
 class fsm:
     def __init__(self):
@@ -47,6 +47,16 @@ class fsm:
         unlock_state = state(passcode+'1','UNLOCKED')
         lock_state = state(passcode+'4','LOCKED')
         
+        self.append(unlock_state)
+        self.append(lock_state)
+        
+        self.states[0].append_args('1', unlock_state)
+        self.states[0].append_args('4', lock_state)
+        
+        self.states[1].append_args('1', unlock_state)
+        self.states[1].append_args('4', lock_state)
+            
+        # append complete passcode state
         complete_state = state(passcode,'NONE')
         complete_state.args.update({'1':unlock_state,'4':lock_state})
         print(complete_state.args)
@@ -81,10 +91,11 @@ class fsm:
     def run(self,passcode):
         self.generate_states(passcode)
         entry = ''
-        while entry != "exit":
-            entry = input("enter your passcode (enter 'exit' to quit): ")
+        while entry != "end":
+            entry = input("enter your passcode (enter 'end' to quit): ")
+            if entry == 'end':
+                sys.exit("program terminated")
             entry = self.read(entry)
-            #print(entry)
             while entry != collections.deque([]):
                 key = entry.popleft()
                 new_state = self.current.parse(key)
