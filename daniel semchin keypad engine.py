@@ -4,7 +4,6 @@ Created on Thu Nov 17 09:15:47 2022
 
 @author: daniel semchin
 """
-
 import unittest
 import re
 import collections
@@ -26,7 +25,6 @@ class state:
         self.output = output
     
     def parse(self,char):
-        
         try: 
             return self.args.get(char)
         except:
@@ -114,13 +112,10 @@ class fsm:
                     new_state.set_output('NONE')
                     print("Parsed: " + str(key))
                     print("Output: " + str(new_state.output))
-                    #print("Output: " + str(original))
                     print(" State: " + str(self.current))
                     self.current.set_output(original)
                     self.current = self.current
                     
-
-
 passcode = input("Create a passcode (leave blank for '2255'): ")
 if passcode == '':
     passcode = '2255'
