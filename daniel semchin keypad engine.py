@@ -8,6 +8,8 @@ import unittest
 import re
 import collections
 import sys
+import random
+import timeit
 
 class state:
     def __init__(self, name, output):
@@ -82,7 +84,11 @@ class fsm:
         return collections.deque(string)
     
     
-    def run(self,passcode):
+    def run(self):
+        passcode = input("Create a passcode (leave blank for '42255'): ")
+        if passcode == '':
+            passcode = '42255'
+            print(passcode)
         self.generate_states(passcode)
         entry = ''
         while entry != "end":
@@ -116,9 +122,74 @@ class fsm:
                     self.current.set_output(original)
                     self.current = self.current
                     
-passcode = input("Create a passcode (leave blank for '2255'): ")
-if passcode == '':
-    passcode = '2255'
-    print(passcode)
+    def hack(self,passcode):
+        self.generate_states(passcode)
+        start_time = timeit.default_timer()
+        keys_attempted = 0
+        while self.current.output != "UNLOCKED":
+            entry = str(random.randint(0,9))
+            if self.current.output == 'UNLOCKED':
+                sys.exit("program terminated")
+            entry = self.read(entry)
+            while entry != collections.deque([]):
+                key = entry.popleft()
+                keys_attempted += 1
+                new_state = self.current.parse(key)
+                
+                if type(new_state) == type(None):
+                    self.current = self.states[-1]
+                    print("Parsed: " + str(key))
+                    print("Output: " + str(self.current.output))
+                    print(" State: " + str(self.current))
+                    
+                elif self.current != new_state:
+                    self.current.out = new_state.output
+                    self.current = new_state    
+                    print("Parsed: " + str(key))
+                    print("Output: " + str(self.current.output))
+                    print(" State: " + str(self.current))
+                    
+                elif self.current == new_state:
+                    original = self.current.output
+                    new_state.set_output('NONE')
+                    print("Parsed: " + str(key))
+                    print("Output: " + str(new_state.output))
+                    print(" State: " + str(self.current))
+                    self.current.set_output(original)
+                    self.current = self.current
+        time_ellapsed = timeit.default_timer() - start_time        
+        print(time_ellapsed)
+        print(keys_attempted)
+        return (time_ellapsed,keys_attempted) 
+                    
+
+    
 keypad = fsm()
-keypad.run(passcode)
+#keypad.run()
+
+import matplotlib.pyplot as plt
+
+time = []
+keys = []
+for i in range(50):
+    time_ellapsed,keys_attempted = keypad.hack('42255')
+    time.append(time_ellapsed)
+    keys.append(keys_attempted)
+    
+plt.scatter(time,keys)
+plt.title("Number of Keys Entered to Unlock vs. Time")
+plt.xlabel("time (s)")
+plt.ylabel("Keys Entered (1e6 keys)")
+plt.show()
+
+    
+
+
+
+
+
+
+
+
+
+
