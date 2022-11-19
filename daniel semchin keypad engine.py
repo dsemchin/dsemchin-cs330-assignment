@@ -21,7 +21,10 @@ class state:
         
     def append_args(self, arg, next_state):
         self.args.update({arg : next_state})
-        
+    
+    def set_output(self, output):
+        self.output = output
+    
     def parse(self,char):
         
         try: 
@@ -80,6 +83,7 @@ class fsm:
     def read(self, string):
         return collections.deque(string)
     
+    
     def run(self,passcode):
         self.generate_states(passcode)
         entry = ''
@@ -91,18 +95,31 @@ class fsm:
             while entry != collections.deque([]):
                 key = entry.popleft()
                 new_state = self.current.parse(key)
-                if self.current == new_state:
-                    self.current = self.current
-                    print('NONE')
-                    break
+                
                 if type(new_state) == type(None):
                     self.current = self.states[-1]
-                    
-                    break
-                else:
-                    self.current = new_state
+                    print("Parsed: " + str(key))
                     print("Output: " + str(self.current.output))
-                print("Current State: " + str(self.current))
+                    print(" State: " + str(self.current))
+                    
+                elif self.current != new_state:
+                    self.current.out = new_state.output
+                    self.current = new_state    
+                    print("Parsed: " + str(key))
+                    print("Output: " + str(self.current.output))
+                    print(" State: " + str(self.current))
+                    
+                elif self.current == new_state:
+                    original = self.current.output
+                    new_state.set_output('NONE')
+                    print("Parsed: " + str(key))
+                    print("Output: " + str(new_state.output))
+                    #print("Output: " + str(original))
+                    print(" State: " + str(self.current))
+                    self.current.set_output(original)
+                    self.current = self.current
+                    
+
 
 passcode = input("Create a passcode (leave blank for '2255'): ")
 if passcode == '':
