@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 17 09:15:47 2022
-
-@author: daniel semchin
-"""
 import unittest
 import re
 import collections
@@ -11,11 +5,13 @@ import sys
 import random
 import timeit
 
+    # Class object contains name of state, input args defined by a dictionary,
+    # and outputs a string
 class state:
     def __init__(self, name, output):
         self.name = name
         self.args = {}
-        self.output = output
+        self.output = str(output)
         
     def __repr__(self):
         return str((self.name))
@@ -42,9 +38,12 @@ class fsm:
     def __repr__(self):
         return str(self.states)
     
+        # appends a state to list of states in FSM instance.
     def append(self, state):
         self.states.append(state)
         
+        # creates states and relations between each digit in passcode and 
+        # states for locking and unlocking. 
     def generate_states(self, passcode):
         # append lock and unlock states
         unlock_state = state(passcode+'1','UNLOCKED')
@@ -83,9 +82,9 @@ class fsm:
     def read(self, string):
         return collections.deque(string)
     
-    
     def run(self):
-        passcode = input("Create a passcode (leave blank for '42255'): ")
+        passcode = input("Create a passcode (leave blank for '42255'), non-digits are ignored: ")
+        passcode = ''.join(re.findall('[0-9]', passcode))
         if passcode == '':
             passcode = '42255'
             print(passcode)
@@ -95,6 +94,7 @@ class fsm:
             entry = input("enter your passcode (enter 'end' to quit): ")
             if entry == 'end':
                 sys.exit("program terminated")
+            entry = ''.join(re.findall('[0-9]', entry))
             entry = self.read(entry)
             while entry != collections.deque([]):
                 key = entry.popleft()
@@ -161,26 +161,25 @@ class fsm:
         print(time_ellapsed)
         print(keys_attempted)
         return (time_ellapsed,keys_attempted) 
-                    
 
-    
+
 keypad = fsm()
-#keypad.run()
+keypad.run()
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
-time = []
-keys = []
-for i in range(50):
-    time_ellapsed,keys_attempted = keypad.hack('42255')
-    time.append(time_ellapsed)
-    keys.append(keys_attempted)
+# time = []
+# keys = []
+# for i in range(50):
+#     time_ellapsed,keys_attempted = keypad.hack('42255')
+#     time.append(time_ellapsed)
+#     keys.append(keys_attempted)
     
-plt.scatter(time,keys)
-plt.title("Number of Keys Entered to Unlock vs. Time")
-plt.xlabel("time (s)")
-plt.ylabel("Keys Entered (1e6 keys)")
-plt.show()
+# plt.scatter(time,keys)
+# plt.title("Number of Keys Entered to Unlock vs. Time")
+# plt.xlabel("time (s)")
+# plt.ylabel("Keys Entered (1e6 keys)")
+# plt.show()
 
     
 
