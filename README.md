@@ -15,7 +15,14 @@ The following shows the FSM diagram which was implemented in my program\
 ![fsm-diagram](https://user-images.githubusercontent.com/118320568/203359642-0bbb987b-dd2b-4088-bf19-335dc2d17f07.png)\
 Two classes were created one to represent a `state` in the FSM and then an class to create an instance of an `fsm`. The state class contained the name of a state, its output, and a dictionary which matches inputs to the next state.\
 \
-The `fsm` class contains all states in a list, tracks the currently active state, and parses the input strings. All inputs in the program uses regex to filter out all non-digit characters (pattern `[0-9]`). The input is read one character at a time and is passed into the current state which will check if the input exists in the dictionary. If the input exists in the state's args dictionary then the state which defines the input becomes the new current state in the fsm instance. Otherwise, if the input does not exist in the dictionary then the current state becomes an `empty state` which affectively resets the progress of the passcode. 
+The `fsm` class contains all states in a list, tracks the currently active state, and parses the input strings. All inputs in the program uses regex to filter out all non-digit characters (pattern `[0-9]`). The input is read one character at a time and is passed into the current state which will check if the input exists in the dictionary. If the input exists in the state's args dictionary then the state which defines the input becomes the new current state in the fsm instance. Otherwise, if the input does not exist in the dictionary then the current state becomes an `empty state` which affectively resets the progress of the passcode.\
+
+After each char is dequed from the input string. A print message is create which will look like this:
+```
+Parsed: last character used as input
+Output: out from new new state
+State: new state
+```
 
 ## Unit Testing Coverage
 I only bring disapointment I'm afraid
