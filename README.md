@@ -22,9 +22,9 @@ I only bring disapointment I'm afraid
 
 ## Breaking in using random number generator
 ### Estimating 
-Assuming the passcode is 5 chracters long, character has a 1/10 chance of being guessed correctly. However guess them all correctly would be a (1/10)^5 chance which is 1/100000 chance of breaking in on his first try if the hacker were to systematically go through every combination (every successive attempt would have (1/100000 - n change, if n is the number of attempts).   
+Assuming the passcode is 5 chracters long, character has a 1/10 chance of being guessed correctly. However guess them all correctly would be a (1/10)^5 chance which is 1/100000 chance of breaking in on his first try if the hacker were to systematically go through every combination (every successive attempt would have (1/(100000 - n) change, if n is the number of attempts). In total it would take 100,000 seconds (about 28 hrs to break in). However if a random number generator is used and repeats are allowed then then it can theoretically be infinite time.   
 ### The actual test
-I created a modified version of the main function which ran the FSM and parsed the characters. Using 
+I created a modified version of the main function which runs the FSM and parsed the characters.
 #### Code used
 The following below is the code used to calculate how long it would take a hacker to break into the keypad. The passcode used was the last 5-digits of my 'A' number which are '42255'. The test was run a total of 50 times and a plot was created!
 
