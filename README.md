@@ -21,8 +21,8 @@ The `fsm` class contains all states in a list, tracks the currently active state
 I only bring disapointment I'm afraid
 
 ## Breaking in using random number generator
-### Estimating
-Assuming the passcode is 5 chracters long, character has a 1/10 chance of being guessed correctly. However guess them all correctly would be a (1/10)^5 chance which
+### Estimating 
+Assuming the passcode is 5 chracters long, character has a 1/10 chance of being guessed correctly. However guess them all correctly would be a (1/10)^5 chance which is 1/100000 chance of breaking in on his first try if the hacker were to systematically go through every combination (every successive attempt would have (1/100000 - n change, if n is the number of attempts).   
 ### The actual test
 I created a modified version of the main function which ran the FSM and parsed the characters. Using 
 #### Code used
@@ -55,4 +55,9 @@ print(min(time),max(time),sum(time)/len(time))
 print(min(keys),max(keys),sum(keys)/len(keys))
 30726 3505109 1178025.02
 ```
+Results: (time, keys entered)
+* min: 0.2800646000000597s, 30726 keys
+* max: 30.779568800000106s, 3505109 keys
+* mean: 11.479170805999983s, 1178025.02 keys\
+Much faster than expected
 ###
